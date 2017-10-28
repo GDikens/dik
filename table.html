@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.4.2/css/buttons.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.3/css/select.bootstrap.min.css">
+    <link rel="stylesheet" href="https://editor.datatables.net/extensions/Editor/css/editor.bootstrap.min.css">
+    <link rel="script" href="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js">
+    <link rel="script" href="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js">
+    <link rel="script" href="https://cdn.datatables.net/select/1.2.3/js/dataTables.select.min.js">
+    <link rel="script" href="https://cdn.datatables.net/keytable/2.3.2/js/dataTables.keyTable.min.js">
+    <link rel="script" href="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js">
+
+</head>
+<script>
+    var editor; // use a global for the submit and return data rendering in the examples
+
+    $(document).ready(function() {
+        editor = new $.fn.dataTable.Editor( {
+            ajax: "../php/staff.php",
+            table: "#example",
+            fields: [ {
+                label: "First name:",
+                name: "first_name"
+            }, {
+                label: "Last name:",
+                name: "last_name"
+            }, {
+                label: "Position:",
+                name: "position"
+            }, {
+                label: "Office:",
+                name: "office"
+            }, {
+                label: "Extension:",
+                name: "extn"
+            }, {
+                label: "Start date:",
+                name: "start_date",
+                type: "datetime"
+            }, {
+                label: "Salary:",
+                name: "salary"
+            }
+            ]
+        } );
+
+        var table = $('#example').DataTable( {
+            dom: "Bfrtip",
+            ajax: "../php/staff.php",
+            columns: [
+                {
+                    data: null,
+                    defaultContent: '',
+                    className: 'select-checkbox',
+                    orderable: false
+                },
+                { data: "first_name" },
+                { data: "last_name" },
+                { data: "position" },
+                { data: "office" },
+                { data: "start_date" },
+                { data: "salary", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) }
+            ],
+            keys: {
+                columns: ':not(:first-child)',
+                editor:  editor
+            },
+            select: {
+                style:    'os',
+                selector: 'td:first-child',
+                blurable: true
+            },
+            buttons: [
+                { extend: "create", editor: editor },
+                { extend: "edit",   editor: editor },
+                { extend: "remove", editor: editor }
+            ]
+        } );
+    } );
+</script>
+<style>
+    div.DTE_Inline input {
+        border: none;
+        background-color: transparent;
+        padding: 0 !important;
+        font-size: 90%;
+    }
+
+    div.DTE_Inline input:focus {
+        outline: none;
+        background-color: transparent;
+    }
+</style>
+<body>
+    <div class="dt-buttons btn-group">
+        <a class="btn btn-default buttons-create" tabindex="0" aria-controls="example" href="#">
+            <span>New</span>
+        </a>
+        <a class="btn btn-default buttons-selected buttons-edit disabled" tabindex="0" aria-controls="example" href="#">
+            <span>Edit</span>
+        </a>
+        <a class="btn btn-default buttons-selected buttons-remove disabled" tabindex="0" aria-controls="example" href="#">
+            <span>Delete</span>
+        </a>
+    </div>
+
+    <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th></th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Position</th>
+            <th>Office</th>
+            <th width="18%">Start date</th>
+            <th>Salary</th>
+        </tr>
+        </thead>
+    </table>
+</body>
+</html>
